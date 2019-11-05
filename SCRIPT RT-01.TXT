@@ -1,0 +1,40 @@
+enable
+configure terminal
+hostname RT-01
+banner motd "ACESSO APENAS PARA PESSOAS DE TI"
+enable secret SenhadaEnable
+service password-encryption
+username juliolima privilege 15 secret CasaArryn
+username andrecaires privilege 15 secret CasaArryn
+username leonardomanhani privilege 15 secret CasaArryn
+username henrique privilege 15 secret CasaArryn
+service password-encryption
+ip domain-name grupo4.local
+crypto key generate rsa general-keys modulus 1024
+security passwords min-length 8
+login block-for 240 attempts 7 within 10
+line vty 0 15
+login local
+transport input ssh
+exec-timeout 5
+exit
+line console 0
+password SenhadaConsole
+login
+exit
+service password-encryption
+interface gigabitEthernet 0/1
+no shutdown
+interface gigabitEthernet 0/1.14
+encapsulation dot1q 14
+ip address 192.168.14.1 255.255.255.0
+description VLAN 14
+ip helper-address 192.168.251.5
+interface gigabitEthernet 0/1.104
+encapsulation dot1q 104
+ip address 192.168.251.1 255.255.255.0
+description VLAN 104
+ip helper-address 192.168.251.5
+no shutdown
+exit
+do wr

@@ -1,0 +1,46 @@
+enable
+configure terminal
+hostname SW-01
+banner motd "ACESSO APENAS PARA PESSOAS DE TI"
+enable secret SenhadaEnable
+service password-encryption
+username juliolima privilege 15 secret CasaArryn
+username andrecaires privilege 15 secret CasaArryn
+username leonardomanhani privilege 15 secret CasaArryn
+username henrique privilege 15 secret CasaArryn
+service password-encryption
+ip domain-name grupo4.local
+crypto key generate rsa general-keys modulus 1024
+line vty 0 15
+login local
+transport input ssh
+exec-timeout 5
+exit
+line console 0
+password SenhadaConsole
+login
+exit
+service password-encryption
+vlan 14
+name VLAN-14
+vlan 104
+name VLAN-104
+interface fastEthernet 0/1
+switchport mode access
+switchport access vlan 14
+description PC 01
+interface fastEthernet 0/2
+switchport mode access
+switchport access vlan 14
+description PC 02
+interface fastEthernet 0/24
+switchport mode trunk
+switchport trunk native vlan 99
+switchport trunk allowed vlan 14,99,104
+interface vlan 104
+ip address 192.168.251.253 255.255.255.0
+description INTERFACE DE GERENCIAMENTO
+no shutdown
+exit
+ip default-gateway 192.168.251.1
+do wr
